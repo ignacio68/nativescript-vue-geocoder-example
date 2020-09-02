@@ -1,0 +1,17 @@
+# JetBrains project files
+.idea
+
+# NPM
+node_modules
+
+# NativeScript application
+hooks
+platforms
+app/setup
+report
+sourceMap
+app/assets/maps/styles
+psd
+
+app/App_resources/Android/google-services.json
+app/App_resources/iOS/GoogleService-info.plist

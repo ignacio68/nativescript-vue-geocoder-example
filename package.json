@@ -14,6 +14,9 @@
       "version": "6.5.0"
     }
   },
+  "scripts": {
+    "devan": "tns debug android --no-hmr --env.snapshot --env.uglify"
+  },
   "dependencies": {
     "@nativescript/theme": "^2.2.1",
     "@vue/devtools": "^5.3.3",

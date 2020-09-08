@@ -20,7 +20,7 @@
           :accessToken="accessToken"
           latitude="0"
           longitude="0"
-          :zoomLevel="12"
+          :zoomLevel="15"
           :hideCompass="true"
           :disableRotation="true"
           :disableScroll="false"
@@ -33,14 +33,14 @@
           col="1"
           backgroundColor="transparent"
         >
-          <!-- <CustomGeocoder
+          <CustomGeocoder
             class="search-location_bar m-16"
             hint="Search..."
             :textFieldWidth="200"
             :maxLengthText="360"
             @on-location-search="locationSearchResult"
-          /> -->
-          <Geocoder
+          />
+          <!-- <Geocoder
             class="search-location_bar m-16"
             :minimumCharactersToSearch="3"
             hint="Search..."
@@ -48,7 +48,7 @@
             :textFieldWidth="200"
             :maxLengthText="360"
             @on-location-search="locationSearchResult"
-          />
+          /> -->
         </StackLayout>
       </GridLayout>
     </Page>
@@ -57,7 +57,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import Geocoder from '@/components/Geocoder.vue'
+// import Geocoder from '@/components/Geocoder.vue'
 import CustomGeocoder from '@/components/CustomGeocoder.vue'
 
 // import { setMap, getMap as map } from '@/store/map'
@@ -68,8 +68,8 @@ import { mapToken } from '@/setup/map'
 export default Vue.extend({
   name: 'MapComponent',
   components: {
-    Geocoder,
-    // CustomGeocoder,
+    // Geocoder,
+    CustomGeocoder,
   },
   data() {
     return {
@@ -87,11 +87,18 @@ export default Vue.extend({
     },
     locationSearchResult(result){
       console.log(`locationSearchResult: ${JSON.stringify(result)}`)
-      const location = result[0]
+      const location = result
       console.log(`longitude: ${location.longitude}`)
       console.log(`latitude: ${location.latitude}`)
       this.map.setCenter([location.longitude, location.latitude], {animated: true})
     },
+    // locationSearchResult(result){
+    //   console.log(`locationSearchResult: ${JSON.stringify(result)}`)
+    //   const location = result[0]
+    //   console.log(`longitude: ${location.longitude}`)
+    //   console.log(`latitude: ${location.latitude}`)
+    //   this.map.setCenter([location.longitude, location.latitude], {animated: true})
+    // },
   }
 })
 </script>

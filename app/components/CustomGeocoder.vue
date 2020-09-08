@@ -24,7 +24,7 @@
       >
         <v-template>
           <StackLayout>
-            <Label :text="formatedTextLocation(location)" />
+            <Label :text="formatedLocationText(location)" />
           </StackLayout>
         </v-template>
     </ListView>
@@ -34,8 +34,8 @@
 <script script lang="ts">
 import Vue from 'vue'
 
-// import * as geocoding from 'nativescript-geocoding'
 import { searchLocations } from '@/services/geocodingService'
+import { formatedText } from '@/utils/text'
 
 import { Location } from '@/services/types'
 
@@ -106,15 +106,9 @@ export default Vue.extend({
       this.resetLocationList()
     },
 
-    removeEmptyKeys(object) {
-      Object.keys(object).forEach((key) => (!object[key] && object[key] !== undefined) && delete object[key])
-      return object
-    },
-
-    formatedTextLocation(location) {
-      const cleanedLocation = this.removeEmptyKeys(location)
-      return `${cleanedLocation.thoroughfare} ${cleanedLocation.subThoroughfare} ${cleanedLocation.postalCode} ${cleanedLocation.locality}`
-
+    // TODO: convert to computed
+    formatedLocationText(location) {
+      return formatedText(location)
     },
 
     onItemTap(e) {

@@ -1,6 +1,33 @@
 <template>
-  <GridLayout
-    class="SearchLocation"
+  <GridLayout rows="auto, auto">
+    <SearchBar
+      row="0"
+      id="Geocoder"
+      v-model="searchedLocation"
+      :hint="hint"
+      :text="searchedLocation"
+      color="#668d8e"
+      backgroundColor="white"
+      borderRadius="16"
+      @textChange="onTextChange"
+      @clear="onClear"
+      @submit="onSubmit"
+    />
+    <ListView
+      row="1"
+      for="location in locationsList"
+      @itemTap="onItemTap"
+      >
+        <v-template>
+          <StackLayout>
+            <Label :text="location.name" />
+          </StackLayout>
+        </v-template>
+    </ListView>
+  </GridLayout>
+
+  <!-- <GridLayout
+    class="Geocoder"
     columns="auto, 200, auto"
   >
     <Image
@@ -35,11 +62,13 @@
       src="res://ic_add_white_36dp"
       @tap="removeLocation"
     />
-  </GridLayout>
+  </GridLayout> -->
 </template>
 
 <script script lang="ts">
 import Vue from 'vue'
+
+import { ItemEventData } from "tns-core-modules/ui/list-view"
 
 import * as geocoding from 'nativescript-geocoding'
 
@@ -57,22 +86,28 @@ export default Vue.extend({
     maxLengthText: {
       type: Number,
       default: 200
+    },
+    minimumCharactersToSearch: {
+      type: Number,
+      default: 3
     }
 
   },
   data(){
 
     return {
-      location: '',
+      searchedLocation: '',
+      locationsList: [],
     }
   },
 
   methods: {
-    searchLocation(query) {
+    searchLocation(query: string) {
       const fetchLocation = geocoding.getLocationFromName(query)
       .then(result =>{
-        console.log(`Found: ${JSON.stringify(result)}`)
-        return result
+        let location = []
+        location.push(result)
+        return location
         }, error => console.log(`Error: ${error.message || error}`)
       )
       return fetchLocation
@@ -80,28 +115,33 @@ export default Vue.extend({
 
     searchLocations(query) {
       const fetchLocations = geocoding.getLocationListFromName(query, 5)
-      .then(results =>{
-        console.log(`Found: ${results.length}`)
-        let locations = []
-        results.map(result => locations.push(result))
-        return locations
+      .then(locations =>{
+        console.log(`Found: ${locations.length}`)
+        locations.map(result => this.locationsList.push(result))
         }, error => console.log(`Error: ${error.message || error}`)
       )
-      return fetchLocations
     },
 
-    async onReturnPress() {
-      const locations = await this.searchLocations(this.location)
-      console.log(`La dirección buscada es: ${JSON.stringify(locations[0])}`)
-      this.$emit('on-location-search', locations)
+    async onSubmit() {
+      await this.searchLocations(this.searchedLocation)
+      // const locations = await this.searchLocations(this.searchedLocation)
+      // console.log(`La dirección buscada es: ${JSON.stringify(locations[0].name)}`)
+      // this.$emit('on-location-search', locations[0])
     },
 
     onTextChange() {
-      console.log(`onTextChange: ${this.location}`)
+      console.log(`onTextChange: ${this.searchedLocation}`)
+      // if(this.searchedLocation >= this.minimumCharactersToSearch) this.searchLocations(this.searchedLocation)
     },
 
-    removeLocation() {
-      this.location = ""
+    onClear() {
+      this.searchedLocation = ""
+      this.locationsList = []
+    },
+
+    onItemTap(e) {
+      console.log(`Item tap`)
+      this.$emit('on-location-search', e.item)
     }
   }
 })
@@ -110,7 +150,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '../app-variables';
 
-.SearchLocation {
+.Geocoder {
   border-color: $primary-light;
   height: 64;
   &[text] {

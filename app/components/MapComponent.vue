@@ -36,19 +36,9 @@
           <CustomGeocoder
             class="search-location_bar m-16"
             hint="Search..."
-            :textFieldWidth="200"
-            :maxLengthText="360"
+            :width="300"
             @on-location-search="locationSearchResult"
           />
-          <!-- <Geocoder
-            class="search-location_bar m-16"
-            :minimumCharactersToSearch="3"
-            hint="Search..."
-            noResultsText="No match results"
-            :textFieldWidth="200"
-            :maxLengthText="360"
-            @on-location-search="locationSearchResult"
-          /> -->
         </StackLayout>
       </GridLayout>
     </Page>
@@ -57,13 +47,11 @@
 <script lang="ts">
 import Vue from 'vue'
 
-// import Geocoder from '@/components/Geocoder.vue'
 import CustomGeocoder from '@/components/CustomGeocoder.vue'
-
-// import { setMap, getMap as map } from '@/store/map'
 
 import { mapToken } from '@/setup/map'
 
+import { MapboxMarker } from "nativescript-mapbox"
 
 export default Vue.extend({
   name: 'MapComponent',
@@ -75,38 +63,63 @@ export default Vue.extend({
     return {
       accessToken: mapToken,
       map: null,
+      userMarker: {
+        id: 1,
+        lat: 0,
+        lng: 0
+      }
     }
   },
   methods: {
-     onMapReady(e) {
+    onMapReady(e) {
       console.log('MAP READY!')
       this.map = e.map
-      // const map = e.map
-      // setMap(map)
-      // this.$emit('on-map-ready', e)
+      this.map.setCenter()
+      this.addMarker()
     },
+
+    animatedCamera(value) {
+       // this is a boring triangle drawn near Amsterdam Central Station
+      this.map.animateCamera({
+      // this is where we animate to
+      target: {
+        lat: value.latitude,
+        lng: value.longitude
+      },
+      zoomLevel: 15, // Android
+      bearing: 270, // Where the camera is pointing, 0-360 (degrees)
+      tilt: 50,
+      duration: 5000 // default 10000 (milliseconds)
+      })
+      this.updateMarker(value)
+    },
+
+    addMarker() {
+      this.map.addMarkers([
+        this.userMarker
+      ])
+    },
+
+    updateMarker(value) {
+      this.userMarker.update({
+        lat: value.latitude,
+        lng: value.longitude
+      })
+    },
+
     locationSearchResult(result){
       console.log(`locationSearchResult: ${JSON.stringify(result)}`)
       const location = result
       console.log(`longitude: ${location.longitude}`)
       console.log(`latitude: ${location.latitude}`)
-      this.map.setCenter([location.longitude, location.latitude], {animated: true})
+      // this.map.setCenter([location.longitude, location.latitude], {animated: true})
+      this.animatedCamera(location)
     },
-    // locationSearchResult(result){
-    //   console.log(`locationSearchResult: ${JSON.stringify(result)}`)
-    //   const location = result[0]
-    //   console.log(`longitude: ${location.longitude}`)
-    //   console.log(`latitude: ${location.latitude}`)
-    //   this.map.setCenter([location.longitude, location.latitude], {animated: true})
-    // },
   }
 })
 </script>
 
 <style lang="scss" scoped>
-  .right-menu {
-    background-color: transparent;
-  }
   .search-location_bar{
     border-radius: 16;
   }

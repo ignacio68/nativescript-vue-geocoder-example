@@ -140,11 +140,19 @@ module.exports = env => {
         },
         node: {
             // Disable node shims that conflict with NativeScript
-            "http": false,
-            "timers": false,
-            "setImmediate": false,
-            "fs": "empty",
-            "__dirname": false,
+            http: false,
+            timers: false,
+            setImmediate: false,
+            fs: "empty",
+            __dirname: false,
+             // Added for mapbox-sdk running
+            tls: 'empty',
+            net: 'empty',
+            dns: 'empty',
+            http2: 'empty',
+            // process: true,
+            // avoid error in util.inherits
+            console: true,
         },
         devtool: hiddenSourceMap ? "hidden-source-map" : (sourceMap ? "inline-source-map" : "none"),
         optimization: {

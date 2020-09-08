@@ -1,29 +1,34 @@
 <template>
   <GridLayout
     class="SearchLocation"
-    columns="auto, 300, auto"
+    columns="auto, 300"
   >
     <Image
       class="search_icon m-8"
       col="0"
       tintColor="#668d8e"
-      src="res://ic_search_white_24dp"
+      src="res://ic_search_white_36dp"
     />
     <RadAutoCompleteTextView
       ref="autocomplete"
-      v-model="location"
       class="search_text m-y-8 m-x-0"
       col="1"
       verticalAlignment="middle"
       :minimumCharactersToSearch="minimumCharactersToSearch"
-      :text="location"
       :hint="hint"
       :noResultsText="noResultsText"
       :completionMode="completionMode"
       :suggestMode="suggestMode"
       :displayMode="displayMode"
       :layaoutMode="layoutMode"
-      :items="dataItems"
+      :items="locations"
+      @tokenAdded="onTokenAdded"
+      @tokenRemoved="onTokenRemoved"
+      @tokenSelected="onTokenSelected"
+      @tokenDeselectd="onTokenDeselected"
+      @textChanged="onTextChanged"
+      @didAutocomplete="onDidAutoComplete"
+      @suggestionViewBecameVisible="onSuggestionViewBecameVisible"
     >
       <SuggestionView
         ~suggestionView
@@ -49,8 +54,9 @@
 <script script lang="ts">
 import Vue from 'vue'
 
-import { ObservableArray } from '@nativescript/core'
-import { getJSON } from '@nativescript/core/http'
+import * as geocoding from 'nativescript-geocoding'
+
+import { searchLocations } from '@/services/geocodingService'
 
 import {
   AutoCompleteSuggestMode,
@@ -67,7 +73,7 @@ export default Vue.extend({
   props: {
     hint: {
       type: String,
-      default: 'Search'
+      default: 'Search...'
     },
     noResultsText: {
       type: String,
@@ -76,14 +82,17 @@ export default Vue.extend({
     minimumCharactersToSearch: {
       type: Number,
       default: 3
-    }
+    },
+    // locations: {
+    //   type: Array,
+    //   default: []
+    // }
   },
   data(){
 
     return {
-      location: '',
-      result: null,
-      dataItems: new ObservableArray(),
+      location:'',
+      locations: new Array<TokenModel>(),
       suggestMode: AutoCompleteSuggestMode.Suggest,
       // suggestMode: AutoCompleteSuggestMode.SuggestAppend, // TODO: Testing
       completionMode: AutoCompleteCompletionMode.StartsWith,
@@ -93,33 +102,90 @@ export default Vue.extend({
     }
   },
 
-  mounted() {
-    const jsonUrl = 'https://raw.githubusercontent.com/NativeScript/nativescript-ui-samples/master/examples-data/airports.json'
+  methods: {
+    // getLocation(index: number) {
+    //   const location = this.locations[index]
+    //   return new TokenModel(location, null)
+    // },
 
-    this.$refs.autocomplete.setLoadSuggestionsAsync(text => {
-      const getAirportsCollection = new Promise((resolve, reject) => {
-        getJSON(jsonUrl)
-          .then((result: any) => {
-            const airportsCollection = result.airports
-            const airports: Array<TokenModel> = new Array()
-            airportsCollection.map(airport => airports.push(new TokenModel(airport.FIELD2, null)))
-            resolve(airports)
+    // getLocationsCount() {
+    //   return this.locations.length
+    // },
+    tokenString(location: any) {
+      return `${location.name}`
+    },
+
+    suggestPopulation(query: string) {
+      console.log(`suggestPopulation: ${query}`)
+      this.$refs.autocomplete.setLoadSuggestionsAsync(async (query) => {
+        await searchLocations(query)
+          .then((locationsCollection: any[]) =>{
+            // const locationsCollection = results
+            locationsCollection.map(location => this.locations.push(new TokenModel(this.tokenString(location), null)))
           })
           .catch(error => {
-            const message = `Error fetching remote data from ${jsonUrl}: ${error.message}`
-            console.log(message)
-            alert(message)
-            reject()
+              const message = `Error fetching remote data: ${error.message}`
+              console.log(message)
           })
+        // const fetchLocations = new Promise((resolve, reject) => {
+        // const fetchLocations = new Promise((resolve, reject) => {
+        //   searchLocations(query)
+        //     .then((result: any[]) => {
+        //       const locationsCollection = result
+        //       // const locations: Array<TokenModel> = new Array()
+        //       locationsCollection.map( location => this.locations.push(new TokenModel(this.tokenString(location), null)))
+        //       resolve (this.locations)
+        //     })
+        //     .catch(error => {
+        //       const message = `Error fetching remote data: ${error.message}`
+        //       console.log(message)
+        //       alert(message)
+        //       reject()
+        //     })
+        // })
       })
-      return getAirportsCollection
-    })
-  },
+    },
+
+    onTokenSelected({ token }) {
+      console.log(`Selected Token: ${token.text}`)
+      this.$emit('on-location-search', token.text)
+    },
+
+    onTextChanged({ text }) {
+      console.log(`onTextChange: ${text}`)
+      if(text.length >= this.minimumCharactersToSearch) this.suggestPopulation(text)
+    },
+
+    /*** PRUEBAS ***/
+    onTokenAdded({ token }) {
+      console.log(`Added Token: ${token.text}`)
+    },
+
+    onTokenRemoved({ token }) {
+      console.log(`Removed Token: ${token.text}`)
+    },
+
+    onTokenDeselected({ token }) {
+      console.log('onTokenDeselected')
+    },
+
+    onDidAutoComplete({ text }) {
+      console.log('onDidAutoComplete')
+    },
+
+    onSuggestionViewBecameVisible({ object }) {
+      console.log('onSuggestionViewBecameVisible')
+    }
+
+    // removeLocation() {
+    //   this.location = ""
+    // },
+  }
 })
 </script>
 
 <style lang="scss" scoped>
-@import '../../app-variables';
+@import '../app-variables';
 
 .search_icon {
   width: 36;

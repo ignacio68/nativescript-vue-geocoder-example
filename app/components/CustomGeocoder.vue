@@ -4,6 +4,7 @@
       row="0"
       id="Geocoder"
       v-model="searchedLocation"
+      :width="width"
       :hint="hint"
       :text="searchedLocation"
       color="#668d8e"
@@ -14,13 +15,16 @@
       @submit="onSubmit"
     />
     <ListView
+      id="geocoderList"
+      ref="geocoderList"
       row="1"
+      :width="width"
       for="location in locationsList"
       @itemTap="onItemTap"
       >
         <v-template>
           <StackLayout>
-            <Label :text="location.name" />
+            <Label :text="formatedTextLocation(location)" />
           </StackLayout>
         </v-template>
     </ListView>
@@ -75,17 +79,13 @@ import * as geocoding from 'nativescript-geocoding'
 export default Vue.extend({
   name: "CustomGeocoder",
   props: {
-    textFieldWidth: {
+    width: {
       type: Number,
       default: 200
     },
     hint: {
       type: String,
       default: "Search..."
-    },
-    maxLengthText: {
-      type: Number,
-      default: 200
     },
     minimumCharactersToSearch: {
       type: Number,
@@ -98,6 +98,14 @@ export default Vue.extend({
     return {
       searchedLocation: '',
       locationsList: [],
+    }
+  },
+  watch: {
+    searchedLocation() {
+      if (this.searchedLocation.length >= 3) {
+        this.resetLocationList()
+        this.searchLocations(this.searchedLocation)
+      }
     }
   },
 
@@ -123,20 +131,36 @@ export default Vue.extend({
     },
 
     async onSubmit() {
+      this.resetLocationList()
       await this.searchLocations(this.searchedLocation)
-      // const locations = await this.searchLocations(this.searchedLocation)
-      // console.log(`La dirección buscada es: ${JSON.stringify(locations[0].name)}`)
-      // this.$emit('on-location-search', locations[0])
     },
 
     onTextChange() {
       console.log(`onTextChange: ${this.searchedLocation}`)
-      // if(this.searchedLocation >= this.minimumCharactersToSearch) this.searchLocations(this.searchedLocation)
+    },
+
+    resetSearchBar() {
+      this.searchedLocation = ""
+    },
+
+    resetLocationList() {
+      this.locationsList = []
     },
 
     onClear() {
-      this.searchedLocation = ""
-      this.locationsList = []
+      this.resetSearchBar()
+      this.resetLocationList()
+    },
+
+    removeEmptyKeys(object) {
+      Object.keys(object).forEach((key) => (!object[key] && object[key] !== undefined) && delete object[key])
+      return object
+    },
+
+    formatedTextLocation(location) {
+      const cleanedLocation = this.removeEmptyKeys(location)
+      return `${cleanedLocation.thoroughfare} ${cleanedLocation.subThoroughfare} ${cleanedLocation.postalCode} ${cleanedLocation.locality}`
+
     },
 
     onItemTap(e) {
@@ -150,23 +174,23 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '../app-variables';
 
-.Geocoder {
-  border-color: $primary-light;
-  height: 64;
-  &[text] {
-    padding-left: 8;
-    color: $primary-variant;
-    vertical-align: center;
-    font-size: $font-sz-xxl;
-  }
-}
-.search_icon {
-  width: 36;
-  height: 36;
-}
-.remove_icon {
-  width: 36;
-  height: 36;
-  rotate: 45;
-}
+// .Geocoder {
+//   border-color: $primary-light;
+//   height: 64;
+//   &[text] {
+//     padding-left: 8;
+//     color: $primary-variant;
+//     vertical-align: center;
+//     font-size: $font-sz-xxl;
+//   }
+// }
+// .search_icon {
+//   width: 36;
+//   height: 36;
+// }
+// .remove_icon {
+//   width: 36;
+//   height: 36;
+//   rotate: 45;
+// }
 </style>

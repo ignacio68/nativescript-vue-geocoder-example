@@ -1,0 +1,69 @@
+@import "~@nativescript/theme/core";
+@import "~@nativescript/theme/blue"; // Or any other color theme (default === blue)
+
+@import "./app-variables";
+
+// classes
+@import "./styles/MDMargins";
+@import "./styles/MDPaddings";
+@import "./styles/MDFonts";
+
+// Place any CSS rules you want to apply on both iOS and Android here.
+// This is where the vast majority of your CSS code goes.
+
+
+/*------ GENERAL ------*/
+Page {
+  background-color: $background;
+  color: $onBackground;
+}
+
+StackLayout {
+  background-color: $background;
+  color: $onBackground;
+}
+
+GridLayout {
+  background-color: $background;
+  color: $onBackground;
+}
+
+Label {
+  background-color: $background;
+  color: $onBackground;
+}
+
+TextView {
+  background-color: $background;
+  color: $onBackground;
+}
+
+TextField {
+  text-align: left;
+  font-weight: bold;
+  background-color: $surface;
+  color: $onSurface;
+}
+
+MDButton {
+  border-radius: 50%;
+  background-color: $primary;
+  color: $onPrimary;
+}
+
+MDTextField {
+  font-weight: bold;
+  text-align: left;
+  background-color: $surface;
+  color: $onSurface;
+}
+
+.action-bar {
+  background-color: $primary-variant;
+  color: $onPrimary;
+}
+
+.bottom-app-bar {
+  background-color: $primary;
+  color: $onPrimary;
+}

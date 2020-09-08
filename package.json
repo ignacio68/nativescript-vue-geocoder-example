@@ -7,24 +7,26 @@
   "nativescript": {
     "id": "org.nativescriptgeocoder.app",
     "templateVersion": "v2",
-    "tns-android": {
-      "version": "6.5.0"
-    },
     "tns-ios": {
       "version": "6.5.0"
+    },
+    "tns-android": {
+      "version": "6.5.3"
     }
   },
   "scripts": {
-    "devan": "tns debug android --no-hmr --env.snapshot --env.uglify"
+    "devan": "tns debug android --no-hmr --env.snapshot --env.uglify",
+    "runan": "tns run android --env.snapshot --env.uglify"
   },
   "dependencies": {
-    "@nativescript/theme": "^2.2.1",
+    "@nativescript/theme": "^2.3.3",
     "@vue/devtools": "^5.3.3",
+    "nativescript-geocoding": "^2.0.1",
     "nativescript-geolocation": "^5.1.0",
     "nativescript-mapbox": "^5.0.1",
     "nativescript-socketio": "^3.3.1",
     "nativescript-toasty": "^3.0.0-alpha.2",
-    "nativescript-ui-autocomplete": "^7.0.2",
+    "nativescript-ui-autocomplete": "^6.0.1",
     "nativescript-vue": "^2.6.1",
     "nativescript-vue-devtools": "^1.4.0",
     "tns-core-modules": "^6.5.1"
@@ -44,7 +46,7 @@
     "node-sass": "^4.13.1",
     "prettier": "^2.0.5",
     "tns-platform-declarations": "^6.5.1",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.7",
     "vue": "^2.6.11",
     "vue-loader": "^15.9.1"
   }

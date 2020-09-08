@@ -122,23 +122,4 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '../app-variables';
 
-// .Geocoder {
-//   border-color: $primary-light;
-//   height: 64;
-//   &[text] {
-//     padding-left: 8;
-//     color: $primary-variant;
-//     vertical-align: center;
-//     font-size: $font-sz-xxl;
-//   }
-// }
-// .search_icon {
-//   width: 36;
-//   height: 36;
-// }
-// .remove_icon {
-//   width: 36;
-//   height: 36;
-//   rotate: 45;
-// }
 </style>

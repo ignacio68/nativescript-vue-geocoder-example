@@ -33,7 +33,7 @@
           col="1"
           backgroundColor="transparent"
         >
-          <CustomGeocoder
+          <Geocoder
             class="search-location_bar m-16"
             hint="Search..."
             :width="300"
@@ -47,7 +47,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import CustomGeocoder from '@/components/CustomGeocoder.vue'
+import Geocoder from '@/components/Geocoder.vue'
 
 import { mapToken } from '@/setup/map'
 
@@ -56,8 +56,7 @@ import { MapboxMarker } from "nativescript-mapbox"
 export default Vue.extend({
   name: 'MapComponent',
   components: {
-    // Geocoder,
-    CustomGeocoder,
+    Geocoder,
   },
   data() {
     return {

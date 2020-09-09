@@ -40,7 +40,7 @@ import { formatedText } from '@/utils/text'
 import { Location } from '@/services/types'
 
 export default Vue.extend({
-  name: "CustomGeocoder",
+  name: "Geocoder",
   props: {
     width: {
       type: Number,

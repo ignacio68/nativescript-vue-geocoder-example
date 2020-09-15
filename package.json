@@ -21,7 +21,6 @@
   "dependencies": {
     "@nativescript/theme": "^2.3.3",
     "@vue/devtools": "^5.3.3",
-    "nativescript-accordion": "^6.0.0-beta.2",
     "nativescript-geocoding": "^2.0.2",
     "nativescript-geolocation": "^5.1.0",
     "nativescript-mapbox": "^5.0.1",

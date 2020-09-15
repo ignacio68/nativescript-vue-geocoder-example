@@ -1,6 +1,6 @@
 import Vue from 'nativescript-vue'
-// import Map from './views/Map.vue'
 import MapComponent from './components/MapComponent.vue'
+
 import VueDevtools from 'nativescript-vue-devtools'
 
 Vue.registerElement('Mapbox', () => require('nativescript-mapbox').MapboxView)

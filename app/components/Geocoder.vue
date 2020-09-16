@@ -1,125 +1,204 @@
 <template>
-  <GridLayout rows="auto, auto">
+  <GridLayout
+    id="geocoder"
+    rows="auto, auto"
+    :width="width"
+  >
     <SearchBar
+      id="geocoder-searchbar"
       row="0"
-      id="Geocoder"
       v-model="searchedLocation"
-      :width="width"
       :hint="hint"
       :text="searchedLocation"
-      color="#668d8e"
-      backgroundColor="white"
-      borderRadius="16"
+      :color="searchBarFontColor"
+      :backgroundColor="searchBarBackgroundColor"
+      fontSize="64"
+      :textFieldHintColor="textFieldHintColor"
+      :textFieldBackgroundColor="textFieldBackgroundColor"
       @textChange="onTextChange"
       @clear="onClear"
       @submit="onSubmit"
     />
     <ListView
-      id="geocoderList"
-      ref="geocoderList"
+      id="geocoder-list"
+      ref="locations-list"
       row="1"
-      :width="width"
+      :height="listViewHeight"
       for="location in locationsList"
       @itemTap="onItemTap"
       >
         <v-template>
-          <StackLayout>
-            <Label :text="formatedLocationText(location)" />
-          </StackLayout>
+          <LocationItem
+            class="locations-list-item"
+            :item="location"
+            :listItemBackgroundColor="listItemBackgroundColor"
+            :itemTitleFontSize="itemTitleFontSize"
+            :itemTitleFontColor="itemTitleFontColor"
+            :itemTextFontSize="itemTextFontSize"
+            :itemTextFontColor="itemTextFontColor"
+          />
         </v-template>
     </ListView>
   </GridLayout>
 </template>
 
 <script script lang="ts">
-import Vue from 'vue'
+  import Vue from 'vue'
 
-import { searchLocations } from '@/services/geocodingService'
-import { formatedText } from '@/utils/text'
+  import { setInterval, clearInterval } from 'tns-core-modules/timer'
 
-import { Location } from '@/services/types'
+  import * as geocoding from 'nativescript-geocoding'
 
-export default Vue.extend({
-  name: "Geocoder",
-  props: {
-    width: {
-      type: Number,
-      default: 200
+  import { searchLocations } from '@/services/geocodingService'
+
+  import { Location } from '@/services/types'
+
+  import LocationItem from './LocationItem.vue'
+
+  export default Vue.extend({
+    name: "Geocoder",
+
+    components: {
+      LocationItem,
     },
-    hint: {
-      type: String,
-      default: "Search..."
+
+    props: {
+      width: {
+        type: Number,
+        default: 200
+      },
+      hint: {
+        type: String,
+        default: "Search..."
+      },
+      searchBarBackgroundColor: {
+        type: String,
+        default: "white"
+      },
+      searchBarFontColor: {
+        type: String,
+        default: "black"
+      },
+      textFieldHintColor: {
+        type: String,
+        default: "black"
+      },
+      textFieldBackgroundColor: {
+        type: String,
+        default: "ghostwhite"
+      },
+      minimumCharactersToSearch: {
+        type: Number,
+        default: 3
+      },
+      interval: {
+        type: Number,
+        default: 1000
+      },
+      listItemBackgroundColor: {
+        type:String,
+        default: "white"
+      },
+      itemTitleFontSize: {
+        type: String,
+        default:"16"
+      },
+      itemTitleFontColor: {
+        type: String,
+        default: "black"
+      },
+      itemTextFontSize: {
+        type: String,
+        default:"16"
+      },
+      itemTextFontColor: {
+        type: String,
+        default: "black"
+      },
     },
-    minimumCharactersToSearch: {
-      type: Number,
-      default: 3
-    }
 
-  },
-
-  data(){
-
-    return {
-      searchedLocation: '',
-      locationsList: void 0,
-    }
-  },
-
-  mounted() {
-    this.resetLocationList()
-  },
-
-  watch: {
-    async searchedLocation() {
-      if (this.searchedLocation.length >= 3) {
-        this.resetLocationList()
-        await this.fetchLocationsList()
+    data(){
+      return {
+        searchedLocation: '',
+        oldSearchedLocation: '',
+        locationsList: [],
       }
-      console.log(`locationsList: ${JSON.stringify(this.locationsList)}`)
-    }
-  },
-
-  methods: {
-    async fetchLocationsList() {
-      this.locationsList = await searchLocations(this.searchedLocation)
     },
 
-    resetSearchBar() {
-      this.searchedLocation = ""
+    computed: {
+      listViewHeight() {
+        const height = this.locationsList ? this.locationsList.length * 64 : 0
+      },
     },
 
-    resetLocationList() {
-      this.locationsList = []
-    },
-
-    async onSubmit() {
-      this.resetLocationList()
-      await this.fetchLocationsList()
-    },
-
-    onTextChange() {
-      console.log(`onTextChange: ${this.searchedLocation}`)
-    },
-
-    onClear() {
-      this.resetSearchBar()
+    mounted() {
       this.resetLocationList()
     },
 
-    // TODO: convert to computed
-    formatedLocationText(location) {
-      return formatedText(location)
+    watch: {
+      searchedLocation() {
+        if (this.searchedLocation.length === this.minimumCharactersToSearch) this.loadSearch()
+        console.log(`locationsList: ${JSON.stringify(this.locationsList)}`)
+      },
     },
 
-    onItemTap(e) {
-      console.log(`Item tap: ${JSON.stringify(e.item)}`)
-      this.$emit('on-location-search', e.item)
+    methods: {
+      setOldSearchedLocation() {
+        this.oldSearchedLocation = this.searchedLocation
+      },
+
+      async fetchLocationsList() {
+        console.log('fetchLocationsList()')
+        this.locationsList = await geocoding.getLocationListFromName(this.searchedLocation, 5)
+      },
+
+      resetSearchBar() {
+        this.searchedLocation = ""
+      },
+
+      resetLocationList() {
+        this.locationsList = []
+      },
+
+      onClear() {
+        this.resetSearchBar()
+        this.resetLocationList()
+      },
+
+      loadSearch() {
+        console.log('loadsearch()')
+        const vm = this
+        let search = setInterval(() => {
+          if(vm.searchedLocation !== vm.oldSearchedLocation) {
+            vm.setOldSearchedLocation()
+            vm.fetchLocationsList()
+          }
+          if (vm.searchedLocation.length < vm.minimumCharactersToSearch) clearInterval(search)
+        }, vm.interval)
+      },
+
+      onSubmit() {
+        console.log('onSubmit()')
+        this.resetLocationList()
+        this.fetchLocationsList()
+      },
+
+      onTextChange(e) {
+        console.log(`onTextChange: ${e.value}`)
+        this.$emit('on-text-change', e)
+      },
+
+      onItemTap(args) {
+        this.$emit('on-location-search', args.item)
+        this.onClear()
+      }
     }
-  }
-})
+  })
 </script>
 
 <style lang="scss" scoped>
-@import '../app-variables';
 
+  .locations-list-item {
+    margin-left: 16;
+  }
 </style>

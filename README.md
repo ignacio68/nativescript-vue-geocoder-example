@@ -1,6 +1,30 @@
-# Nativescript Mapbox Geocoder
+# Nativescript Geocoder Example
 
-> A native application built with NativeScript-Vue
+> An example of the Nativescript-Vue geocoder component with Mapbox
+
+![nativescript geocoder + mapbox example](/images/philly-magic-gardens.jpg "Philadelphia's Magic Gardens")
+
+## 3rd party plugins used
+
+- [Nativescript Geocoding](https://github.com/timdoege/nativescript-geocoding)
+
+- [Nativescript Mapbox](https://github.com/Yermo/nativescript-mapbox)
+
+
+## Notes
+
+- You need a Mapbox account to provide a map key
+
+  *setup/map.ts*
+  >export const mapToken ='YOUR MAPBOX KEY'
+
+- For Android, the minimum **API level is 21** in order to get detailed location info.
+
+- On iOS you may receive this message:
+  > AError: iOS CLGeocoder error : The operation couldn’t be completed. (kCLErrorDomain error 8.)
+
+  if the CLGeocoder was not able to find anything for the search string.
+
 
 ## Usage
 
@@ -19,5 +43,3 @@ tns debug <platform>
 
 # Build for production
 tns build <platform> --env.production
-
-```

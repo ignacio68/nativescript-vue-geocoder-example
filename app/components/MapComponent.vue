@@ -34,9 +34,14 @@
           backgroundColor="transparent"
         >
           <Geocoder
-            class="search-location_bar m-16"
+            class="search-location_bar"
             hint="Search..."
             :width="300"
+            searchBarFontColor="black"
+            searchBarBackgroundColor="white"
+            textFieldHintColor="gray"
+            listItemBackgroundColor="white"
+            textFieldBackgroundColor="ghostwhite"
             @on-location-search="locationSearchResult"
           />
         </StackLayout>
@@ -78,17 +83,15 @@ export default Vue.extend({
     },
 
     animatedCamera(value) {
-       // this is a boring triangle drawn near Amsterdam Central Station
       this.map.animateCamera({
-      // this is where we animate to
-      target: {
-        lat: value.latitude,
-        lng: value.longitude
-      },
-      zoomLevel: 15, // Android
-      bearing: 270, // Where the camera is pointing, 0-360 (degrees)
-      tilt: 50,
-      duration: 5000 // default 10000 (milliseconds)
+        target: {
+          lat: value.latitude,
+          lng: value.longitude
+        },
+        zoomLevel: 15, // Android
+        bearing: 270, // Where the camera is pointing, 0-360 (degrees)
+        tilt: 50,
+        duration: 5000 // default 10000 (milliseconds)
       })
       this.updateMarker(value)
     },
@@ -118,8 +121,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .search-location_bar{
-    border-radius: 16;
+    margin: 16;
   }
 </style>

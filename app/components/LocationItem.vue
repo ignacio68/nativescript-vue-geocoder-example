@@ -3,14 +3,13 @@
     class="item-wrapper"
     rows="28, 36"
     height="64"
+    fontSize="16"
     :backgroundColor="listItemBackgroundColor"
-    borderBottomRightRadius="16"
-    borderBottomLeftRadius="16"
   >
     <Label
       class="item-title"
       row="0"
-      :fontSize="itemTitleFontSize"
+      :fontSize="itemFontSize"
       :color="itemTitleFontColor"
       :text="itemTitle(item)"
     />
@@ -24,7 +23,7 @@
         class="item-text"
         row="0"
         col="0"
-        :fontSize="itemTextFontSize"
+        :fontSize="itemFontSize"
         :color="itemTextFontColor"
         :text="item.thoroughfare"
       />
@@ -33,7 +32,7 @@
         class="item-text"
         row="0"
         col="1"
-        :fontSize="itemTextFontSize"
+        :fontSize="itemFontSize"
         :color="itemTextFontColor"
         :text="item.subThoroughfare"
       />
@@ -42,7 +41,7 @@
         class="item-text"
         row="0"
         col="2"
-        :fontSize="itemTextFontSize"
+        :fontSize="itemFontSize"
         :color="itemTextFontColor"
         :text="item.locality"
       />
@@ -51,7 +50,7 @@
         class="item-text"
         row="0"
         col="3"
-        :fontSize="itemTextFontSize"
+        :fontSize="itemFontSize"
         :color="itemTextFontColor"
         :text="item.postalCode"
       />
@@ -60,7 +59,7 @@
         class="item-text"
         row="0"
         col="4"
-        :fontSize="itemTextFontSize"
+        :fontSize="itemFontSize"
         :color="itemTextFontColor"
         :text="item.country"
       />
@@ -82,17 +81,13 @@
         type: String,
         default: "white"
       },
-      itemTitleFontSize: {
+      itemFontSize: {
         type: String,
         default:"16"
       },
       itemTitleFontColor: {
         type: String,
         default: "black"
-      },
-      itemTextFontSize: {
-        type: String,
-        default:"16"
       },
       itemTextFontColor: {
         type: String,

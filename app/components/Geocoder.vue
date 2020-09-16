@@ -24,6 +24,9 @@
       ref="locations-list"
       row="1"
       :height="listViewHeight"
+      :separatorColor="listItemBackgroundColor"
+      borderBottomLeftRadius="16"
+      borderBottomRightRadius="16"
       for="location in locationsList"
       @itemTap="onItemTap"
       >
@@ -32,9 +35,8 @@
             class="locations-list-item"
             :item="location"
             :listItemBackgroundColor="listItemBackgroundColor"
-            :itemTitleFontSize="itemTitleFontSize"
+            :itemFontSize="itemFontSize"
             :itemTitleFontColor="itemTitleFontColor"
-            :itemTextFontSize="itemTextFontSize"
             :itemTextFontColor="itemTextFontColor"
           />
         </v-template>
@@ -99,17 +101,13 @@
         type:String,
         default: "white"
       },
-      itemTitleFontSize: {
+      itemFontSize: {
         type: String,
         default:"16"
       },
       itemTitleFontColor: {
         type: String,
         default: "black"
-      },
-      itemTextFontSize: {
-        type: String,
-        default:"16"
       },
       itemTextFontColor: {
         type: String,
@@ -127,7 +125,7 @@
 
     computed: {
       listViewHeight() {
-        const height = this.locationsList ? this.locationsList.length * 64 : 0
+        return this.locationsList ? this.locationsList.length * 64 : 0
       },
     },
 
@@ -198,7 +196,15 @@
 
 <style lang="scss" scoped>
 
-  .locations-list-item {
-    margin-left: 16;
-  }
+  // #geocoder-list {
+  //   border-bottom-left-radius: 16;
+  //   border-bottom-right-radius: 16;
+  // }
+  // .locations-list-item {
+  //   margin-left: 16;
+  // }
+  // .locations-list-item:last-child {
+  //   border-bottom-left-radius: 16;
+  //   border-bottom-right-radius: 16;
+  // }
 </style>

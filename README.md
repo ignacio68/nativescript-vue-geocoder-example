@@ -2,7 +2,9 @@
 
 > An example of the Nativescript-Vue geocoder component with Mapbox
 
-![nativescript geocoder + mapbox example](/images/philly-magic-gardens.jpg "Philadelphia's Magic Gardens")
+![map with geocoder](/images/nativescript_geocoder_01.jpg  "Multiple results")
+
+![map with geocoder](/images/nativescript_geocoder_02.jpg  "Fly to the desire location")
 
 ## 3rd party plugins used
 

@@ -10,8 +10,8 @@ platforms
 app/setup
 report
 sourceMap
-app/assets/maps/styles
 psd
+garbage
 
 app/App_resources/Android/google-services.json
 app/App_resources/iOS/GoogleService-info.plist

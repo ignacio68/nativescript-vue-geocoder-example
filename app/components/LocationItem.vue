@@ -13,62 +13,19 @@
       :color="itemTitleFontColor"
       :text="itemTitle(item)"
     />
-    <GridLayout
+    <Label
+      class="item-text"
       row="1"
-      columns="auto, auto, auto, auto, auto"
-      class="item-text__wrapper"
-    >
-      <Label
-        v-if="item.thoroughfare"
-        class="item-text"
-        row="0"
-        col="0"
-        :fontSize="itemFontSize"
-        :color="itemTextFontColor"
-        :text="item.thoroughfare"
+      :fontSize="itemFontSize"
+      :color="itemTextFontColor"
+      :text="resultText(item)"
       />
-      <Label
-        v-if="item.subThoroughfare"
-        class="item-text"
-        row="0"
-        col="1"
-        :fontSize="itemFontSize"
-        :color="itemTextFontColor"
-        :text="item.subThoroughfare"
-      />
-      <Label
-        v-if="item.locality"
-        class="item-text"
-        row="0"
-        col="2"
-        :fontSize="itemFontSize"
-        :color="itemTextFontColor"
-        :text="item.locality"
-      />
-      <Label
-        v-if="item.postalCode"
-        class="item-text"
-        row="0"
-        col="3"
-        :fontSize="itemFontSize"
-        :color="itemTextFontColor"
-        :text="item.postalCode"
-      />
-      <Label
-        v-if="item.country"
-        class="item-text"
-        row="0"
-        col="4"
-        :fontSize="itemFontSize"
-        :color="itemTextFontColor"
-        :text="item.country"
-      />
-    </GridLayout>
   </GridLayout>
 </template>
 
-
 <script>
+  import { getShortLocationString } from '@/utils/text'
+
   export default({
     name: "LocationItem",
 
@@ -104,6 +61,11 @@
     methods: {
       itemTitle(item) {
         return item.subThoroughfare ? item.thoroughfare : item.name
+      },
+      resultText(item) {
+        // const resultString = getShortLocationString(item)
+        // return `${resultString}`
+        return getShortLocationString(item)
       }
     }
   })
@@ -115,14 +77,11 @@
     padding-top: 8;
     padding-left: 16;
   }
-  .item-text__wrapper {
+  .item-text {
     padding: {
       bottom: 16;
       left: 16;
       right: 16;
     }
-  }
-  .item-text {
-    padding-right: 8;
   }
 </style>

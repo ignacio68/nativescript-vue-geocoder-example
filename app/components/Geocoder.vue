@@ -6,6 +6,7 @@
   >
     <SearchBar
       id="geocoder-searchbar"
+      ref="searchBar"
       row="0"
       v-model="searchedLocation"
       :hint="hint"
@@ -17,7 +18,6 @@
       :textFieldBackgroundColor="textFieldBackgroundColor"
       @textChange="onTextChange"
       @clear="onClear"
-      @submit="onSubmit"
     />
     <ListView
       id="geocoder-list"
@@ -150,17 +150,16 @@
         this.locationsList = await geocoding.getLocationListFromName(this.searchedLocation, 5)
       },
 
+      hiddenSearchBar() {
+        this.$refs.searchBar.nativeView.dismissSoftInput()
+      },
+
       resetSearchBar() {
         this.searchedLocation = ""
       },
 
       resetLocationList() {
         this.locationsList = []
-      },
-
-      onClear() {
-        this.resetSearchBar()
-        this.resetLocationList()
       },
 
       loadSearch() {
@@ -175,10 +174,10 @@
         }, vm.interval)
       },
 
-      onSubmit() {
-        console.log('onSubmit()')
+      onClear() {
+        this.hiddenSearchBar()
+        this.resetSearchBar()
         this.resetLocationList()
-        this.fetchLocationsList()
       },
 
       onTextChange(e) {

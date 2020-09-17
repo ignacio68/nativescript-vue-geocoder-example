@@ -29,12 +29,40 @@ export interface GeocoderDefaultOptions {
   marker: boolean | object
 }
 
-export interface Location {
+export interface ShortLocation {
   /**
+   * The street address associated with the placemark.
+   */
+  thoroughfare?: string;
+
+  /**
+   * Additional street-level information for the placemark.
+   */
+  subThoroughfare?: string;
+
+  /**
+   * The city associated with the placemark.
+   */
+  locality?: string;
+
+  /**
+   * The postal code associated with the placemark.
+   */
+  postalCode?: string;
+
+  /**
+   * The name of the country associated with the placemark.
+   */
+  country?: string;
+}
+
+export interface Location extends ShortLocation{
+   /**
    * The name of the placemark.
    *
    */
   name: string;
+
 
   /**
    * The latitude of the geolocation, in degrees.
@@ -47,24 +75,9 @@ export interface Location {
   longitude: number;
 
   /**
-   * The name of the country associated with the placemark.
-   */
-  country?: string;
-
-  /**
    * The abbreviated country name.
    */
   isoCountryCode?: string;
-
-  /**
-   * The city associated with the placemark.
-   */
-  locality?: string;
-
-  /**
-   * The postal code associated with the placemark.
-   */
-  postalCode?: string;
 
   /**
    * The state or province associated with the placemark.
@@ -80,14 +93,4 @@ export interface Location {
    * Additional city-level information for the placemark.
    */
   subLocality?: string;
-
-  /**
-   * The street address associated with the placemark.
-   */
-  thoroughfare?: string;
-
-  /**
-   * Additional street-level information for the placemark.
-   */
-  subThoroughfare?: string;
 }

@@ -45,8 +45,7 @@
 <script script lang="ts">
   import Vue from 'vue'
 
-  import { setInterval, clearInterval } from 'tns-core-modules/timer'
-
+  import { setInterval, clearInterval } from '@nativescript/core/timer'
   import * as geocoding from 'nativescript-geocoding'
 
   import { searchLocations } from '@/services/geocodingService'

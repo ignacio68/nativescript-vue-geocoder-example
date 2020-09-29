@@ -3,7 +3,7 @@ import MapComponent from './components/MapComponent.vue'
 
 import VueDevtools from 'nativescript-vue-devtools'
 
-Vue.registerElement('Mapbox', () => require('nativescript-mapbox').MapboxView)
+Vue.registerElement('Mapbox', () => require('@nstudio/nativescript-mapbox').MapboxView)
 
 if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)

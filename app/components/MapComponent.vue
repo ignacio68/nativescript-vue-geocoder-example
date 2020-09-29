@@ -57,7 +57,7 @@ import Geocoder from '@/components/Geocoder.vue'
 
 import { mapToken } from '@/setup/map'
 
-import { MapboxMarker } from "nativescript-mapbox"
+import { MapboxMarker } from "@nstudio/nativescript-mapbox"
 
 export default Vue.extend({
   name: 'MapComponent',

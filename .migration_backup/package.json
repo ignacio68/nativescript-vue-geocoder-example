@@ -4,6 +4,16 @@
   "description": "A native application built with NativeScript-Vue",
   "author": "Ignacio Lopez-Amor<ignaciolopezamor@gmail.com>",
   "license": "MIT",
+  "nativescript": {
+    "id": "org.nativescriptgeocoder.app",
+    "templateVersion": "v2",
+    "tns-ios": {
+      "version": "6.5.0"
+    },
+    "tns-android": {
+      "version": "6.5.3"
+    }
+  },
   "scripts": {
     "devan": "tns debug android --no-hmr --env.snapshot --env.uglify",
     "runan": "tns run android --env.snapshot --env.uglify"
@@ -18,7 +28,7 @@
     "nativescript-toasty": "^3.0.0-alpha.2",
     "nativescript-vue": "^2.8.1",
     "nativescript-vue-devtools": "^1.4.0",
-    "@nativescript/core": "7.0.0"
+    "tns-core-modules": "^6.5.20"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -34,10 +44,9 @@
     "nativescript-worker-loader": "~0.11.0",
     "node-sass": "^4.13.1",
     "prettier": "^2.1.2",
+    "tns-platform-declarations": "^6.5.15",
     "typescript": "^3.9.7",
     "vue": "^2.6.12",
-    "vue-loader": "^15.9.1",
-    "@nativescript/types": "7.0.0"
-  },
-  "main": "main"
+    "vue-loader": "^15.9.1"
+  }
 }

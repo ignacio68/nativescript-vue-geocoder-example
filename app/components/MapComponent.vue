@@ -35,12 +35,13 @@
         >
           <Geocoder
             class="search-location_bar"
+            :borderRadius="16"
             hint="Search..."
             :width="300"
             searchBarFontColor="black"
-            searchBarBackgroundColor="white"
+            searchBarBackgroundColor="green"
             textFieldHintColor="gray"
-            listItemBackgroundColor="white"
+            listViewBackgroundColor="white"
             textFieldBackgroundColor="ghostwhite"
             @on-location-search="locationSearchResult"
           />

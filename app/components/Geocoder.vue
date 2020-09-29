@@ -4,29 +4,26 @@
     rows="auto, auto"
     :width="width"
   >
-    <SearchBar
-      id="geocoder-searchbar"
-      ref="searchBar"
+    <CustomSearchBar
       row="0"
-      v-model="searchedLocation"
-      :hint="hint"
-      :text="searchedLocation"
-      :color="searchBarFontColor"
-      :backgroundColor="searchBarBackgroundColor"
-      fontSize="64"
-      :textFieldHintColor="textFieldHintColor"
-      :textFieldBackgroundColor="textFieldBackgroundColor"
-      @textChange="onTextChange"
-      @clear="onClear"
+      :borderRadius="borderRadius"
+      :searchbarBackGroundColor="searchbarBackGroundColor"
+      :iconColor="iconColor"
+      :textColor="searchBarFontColor"
+      :textFontSize="16"
+      :isListViewVisible="isListViewVisible"
+      @on-text-change="onTextChange"
+      @on-clear="onClear"
     />
     <ListView
       id="geocoder-list"
       ref="locations-list"
       row="1"
+      :borderBottomLeftRadius="borderRadius"
+      :borderBottomRightRadius="borderRadius"
+      :backgroundColor="listViewBackgroundColor"
       :height="listViewHeight"
-      :separatorColor="listItemBackgroundColor"
-      borderBottomLeftRadius="16"
-      borderBottomRightRadius="16"
+      :separatorColor="listViewBackgroundColor"
       for="location in locationsList"
       @itemTap="onItemTap"
       >
@@ -34,10 +31,11 @@
           <LocationItem
             class="locations-list-item"
             :item="location"
-            :listItemBackgroundColor="listItemBackgroundColor"
+            :listItemBackgroundColor="listViewBackgroundColor"
             :itemFontSize="itemFontSize"
             :itemTitleFontColor="itemTitleFontColor"
             :itemTextFontColor="itemTextFontColor"
+            :borderRadius="borderRadius"
           />
         </v-template>
     </ListView>
@@ -55,16 +53,22 @@
 
   import { Location } from '@/services/types'
 
+  import CustomSearchBar from './CustomSearchBar.vue'
   import LocationItem from './LocationItem.vue'
 
   export default Vue.extend({
     name: "Geocoder",
 
     components: {
+      CustomSearchBar,
       LocationItem,
     },
 
     props: {
+      borderRadius: {
+        type: Number,
+        default: 16
+      },
       width: {
         type: Number,
         default: 200
@@ -73,7 +77,7 @@
         type: String,
         default: "Search..."
       },
-      searchBarBackgroundColor: {
+      searchbarBackGroundColor: {
         type: String,
         default: "white"
       },
@@ -89,6 +93,10 @@
         type: String,
         default: "ghostwhite"
       },
+      iconColor: {
+        type: String,
+        default: "black"
+      },
       minimumCharactersToSearch: {
         type: Number,
         default: 3
@@ -97,7 +105,7 @@
         type: Number,
         default: 1000
       },
-      listItemBackgroundColor: {
+      listViewBackgroundColor: {
         type:String,
         default: "white"
       },
@@ -127,6 +135,10 @@
       listViewHeight() {
         return this.locationsList ? this.locationsList.length * 64 : 0
       },
+
+      isListViewVisible() {
+        return this.listViewHeight ? true : false
+      },
     },
 
     mounted() {
@@ -135,12 +147,13 @@
 
     watch: {
       searchedLocation() {
-        if (this.searchedLocation.length === this.minimumCharactersToSearch) this.loadSearch()
+        if (this.searchedLocation.length >= this.minimumCharactersToSearch) this.loadSearch()
         console.log(`locationsList: ${JSON.stringify(this.locationsList)}`)
       },
     },
 
     methods: {
+
       setOldSearchedLocation() {
         this.oldSearchedLocation = this.searchedLocation
       },
@@ -150,9 +163,9 @@
         this.locationsList = await geocoding.getLocationListFromName(this.searchedLocation, 5)
       },
 
-      hiddenSearchBar() {
-        this.$refs.searchBar.nativeView.dismissSoftInput()
-      },
+      // hiddenSearchBar() {
+      //   this.$refs.searchBar.nativeView.dismissSoftInput()
+      // },
 
       resetSearchBar() {
         this.searchedLocation = ""
@@ -175,15 +188,19 @@
       },
 
       onClear() {
-        this.hiddenSearchBar()
+        // this.hiddenSearchBar()
         this.resetSearchBar()
         this.resetLocationList()
       },
 
-      onTextChange(e) {
-        console.log(`onTextChange: ${e.value}`)
-        this.$emit('on-text-change', e)
+      onTextChange(string) {
+        console.log(`onTextChange: ${string}`)
+        this.searchedLocation = string
       },
+      // onTextChange(e) {
+      //   console.log(`onTextChange: ${e.value}`)
+      //   this.$emit('on-text-change', e)
+      // },
 
       onItemTap(args) {
         this.$emit('on-location-search', args.item)
@@ -199,11 +216,14 @@
   //   border-bottom-left-radius: 16;
   //   border-bottom-right-radius: 16;
   // }
-  // .locations-list-item {
-  //   margin-left: 16;
-  // }
-  // .locations-list-item:last-child {
-  //   border-bottom-left-radius: 16;
-  //   border-bottom-right-radius: 16;
-  // }
+
+  .locations-list-item {
+    border-bottom-left-radius: 16;
+    border-bottom-right-radius: 16;
+  }
+  .locations-list:last-child {
+    // border-bottom-left-radius: 16;
+    // border-bottom-right-radius: 16;
+    background-color: red;
+  }
 </style>

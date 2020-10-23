@@ -2,8 +2,8 @@
   <GridLayout
     class="searchbar"
     ref="searchbar"
-    columns="auto, auto, auto"
-    height="48"
+    columns="56, *, 56"
+    height="56"
     :backgroundColor="searchbarBackGroundColor"
     :borderColor="searchbarBorderColor"
     :borderRadius="borderRadius"
@@ -11,6 +11,8 @@
     <Image
       class="search-icon"
       col="0"
+      width="24"
+      height="24"
       :tintColor="iconColor"
       src="res://ic_search_white_36dp"
     />
@@ -37,6 +39,8 @@
     />
     <Image
       class="remove-icon"
+      width="24"
+      height="24"
       col="2"
       :tintColor="iconColor"
       src="res://ic_clear_black_36dp"
@@ -45,7 +49,7 @@
   </GridLayout>
 </template>
 
-<script script lang="ts">
+<script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -142,9 +146,9 @@ export default Vue.extend({
 //   }
 // }
 .search-icon .remove-icon{
-  margin: 8;
-  width: 12;
-  height: 12;
+  margin: 16;
+  width: 24;
+  height: 24;
 }
 
 .search-text {

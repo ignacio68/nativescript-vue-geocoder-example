@@ -33,7 +33,7 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
-    "@nativescript/webpack": "^3.0.5",
+    "@nativescript/webpack": "^5.0.12",
     "@types/node": "^13.13.21",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
